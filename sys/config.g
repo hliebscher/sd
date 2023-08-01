@@ -8,16 +8,16 @@
 ;	set global.RunDaemon = true 
 
 ; Set global IdleCounter               			            ; counts idle time
-if !exists(global.IdleCounter)					 			; macro used to check if we're already in a macro to avoid running triggers multile times
-	set global IdleCounter = 0
-
+if !exists(global.IdleCounter)					 			; to avoid running triggers multile times
+	global IdleCounter = 0
+	
 if !exists(global.ExtruderTempActive_Old)                   ; stores extruder temperature for idle check
 	global ExtruderTempActive_Old = 0	
-
-if !exists(global.BedTempActive_Old)                                    ; stores bed temperature for idle check
+	
+if !exists(global.BedTempActive_Old)                        ; stores bed temperature for idle check
 	global BedTempActive_Old = 0
 
-if !exists(global.OldStateStatus)										; stores the status of the printer, processing = 1
+if !exists(global.OldStateStatus)		    				; stores the status of the printer, processing = 1
 	global OldStateStatus = 0
 ; Log:
 ;	Description at the WebUi for Hotend and Bed changeable
@@ -96,19 +96,16 @@ M92 X160.00 Y160.00 Z1600.00  E415.00						; set steps per mm
 M566 X900.00 Y900.00 Z12.00 E120.00							; set maximum instantaneous speed changes (mm/min)
 M203 X5000.00 Y5000.00 Z1200.00 E1200.00					; set maximum speeds (mm/min)
 M201 X600.00 Y600.00 Z10.00  E250.00						; set accelerations (mm/s^2)
-M906 X1000 Y1000 Z850 E850 I5								; set motor currents (mA) and motor idle factor in per cent
+M906 X1000 Y1000 Z850 E550 I5								; set motor currents (mA) and motor idle factor in per cent
 M84 S60								   		    			; Set idle timeout
-M564 H0                                                    ; allow unhomed movement
+M564 H0                                                     ; allow unhomed movement
 
 ;=====================================================================================
 ; Axis Limits
 ;=====================================================================================
 ; Axis Limits
-M208 X-20 Y5 Z0 S1                                          ; set axis minima
-M208 X230 Y235 Z270 S0 										; set axis maxiam
-;M208 X-20:235 Y0:230 Z0:270   								
-;M671 X-20:220 Y110:110 S0.5                                ; leadscrews at left (connected to Z) and right (connected to E1) of X axis
-M671 X0:235 Y110:110 S3.0
+M208 X-20:220 Y7:230 Z-5:270                                 ; set axis minima /
+M671 X-10:235 Y110:110 S3.0
 
 ;=====================================================================================
 ; Endstops
@@ -140,10 +137,10 @@ M557 X15:200 Y15:200 S30:30									; define mesh grid
 ;M98 P"0:/sys/setDefaultProbePoints.g"                      ; define default mesh grid
 
 ;Calculate bed centre
-;if !exists(global.Bed_Center_X)
-;	global Bed_Center_X = floor(move.axes[0].max / 2)
-;if !exists(global.Bed_Center_Y)
-;	global Bed_Center_Y = floor(move.axes[1].max  / 2)
+if !exists(global.Bed_Center_X)
+	global Bed_Center_X = floor(move.axes[0].max / 2)
+if !exists(global.Bed_Center_Y)
+	global Bed_Center_Y = floor(move.axes[1].max  / 2)
 
 ;M558 P0 H5 F120 T6000										; disable Z probe but set dive height, probe speed and travel speed
 

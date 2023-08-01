@@ -2,9 +2,9 @@
 ; run when G29 with no paramters is called.
 ; if this file not found G29 S0 will run
 var m557MinX = 4;  ; put your default here
-var m557MaxX = 195 ; put your default here
-var m557MinY = 7   ; put your default here
-var m557MaxY = 185 ; put your default here
+var m557MaxX = 188 ; put your default here
+var m557MinY = 5   ; put your default here
+var m557MaxY = 180 ; put your default here
 var MinSpace = 10  ; put default minimum spacing
 var MaxSpace = 30  ; put default maximum spacing
 var ProbeNumX = 7  ; put default probe points
@@ -47,18 +47,18 @@ if exists(global.maxProbeY)
 echo "Probing grid - X" ^ var.m557MinX ^ ":" ^ var.m557MaxX ^ " Y" ^ var.m557MinY ^ ":" ^ var.m557MaxY
 
 var MinProbesX = floor((var.m557MaxX - var.m557MinX) / var.MaxSpace)
-;echo "Min Probes X is " ^ var.MinProbesX
+echo "Min Probes X is " ^ var.MinProbesX
 
 var MaxProbesX = floor((var.m557MaxX - var.m557MinX) / var.MinSpace)
-;echo "Max Probes X is " ^ var.MaxProbesX
+echo "Max Probes X is " ^ var.MaxProbesX
 
 set var.ProbeNumX = min(var.MaxProbePoints,var.MaxProbesX)
 
 var MinProbesY = floor((var.m557MaxY - var.m557MinY) / var.MaxSpace)
-;echo "Min Probes Y is " ^ var.MinProbesY
+echo "Min Probes Y is " ^ var.MinProbesY
 
 var MaxProbesY = floor((var.m557MaxY - var.m557MinY) / var.MinSpace)
-;echo "Max Probes Y is " ^ var.MaxProbesY
+echo "Max Probes Y is " ^ var.MaxProbesY
 
 set var.ProbeNumY = min(var.MaxProbePoints,var.MaxProbesY)
 
@@ -88,15 +88,14 @@ M557 X{var.m557MinX,var.m557MaxX} Y{var.m557MinY,var.m557MaxY} P{var.ProbeNumX,v
 echo "M557 X" ^ {var.m557MinX} ^ ":" ^ {var.m557MaxX} ^ " Y" ^ {var.m557MinY} ^ ":" ^ {var.m557MaxY} ^  " P" ^ {var.ProbeNumX} ^ ":" ^ {var.ProbeNumY}
 if result != 0
 	abort "ERROR: could not create mesh" 
-;M557
 else
+	M401
 	G29 S0
 	if result != 0
 		abort "ERROR: Mesh probing failed"
 	else
 		echo "Mesh probing successful.   Loading mesh.."
-
+M402
 M558 H8 F600:300
-G29 S3 "vc200_map.cfg"
 
 
