@@ -1,4 +1,6 @@
-;; universal_load.g  All filament load.g files call this one.
+;=========================================================================
+; universal_load.g  All filament load.g files call this one.
+;=========================================================================
 ;M929 P"0:/macros/filament/loadeventlog.txt" S3 ; start logging
 echo "entering 0:/macros/filament/universal_load.g" 
 

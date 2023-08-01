@@ -10,20 +10,15 @@
 ; Set global IdleCounter               			            ; counts idle time
 if !exists(global.IdleCounter)					 			; macro used to check if we're already in a macro to avoid running triggers multile times
 	set global IdleCounter = 0
-;
-;if !exists(global.ExtruderTempActive_Old)                   ; stores extruder temperature for idle check
-;	global ExtruderTempActive_Old = 0	
-;
-;if !exists(global.BedTempActive_Old)                                    ; stores bed temperature for idle check
-;	global BedTempActive_Old = 0
-;
-;if !exists(global.OldStateStatus)										; stores the status of the printer, processing = 1
-;	global OldStateStatus = 0
-;
-;global IdleCounter = 0                                                 ; counts idle time
-global ExtruderTempActive_Old = 0                                      ; stores extruder temperature for idle check
-global BedTempActive_Old = 0                                           ; stores bed temperature for idle check
-global OldStateStatus = 0                                              ; stores the status of the printer, processing = 1
+
+if !exists(global.ExtruderTempActive_Old)                   ; stores extruder temperature for idle check
+	global ExtruderTempActive_Old = 0	
+
+if !exists(global.BedTempActive_Old)                                    ; stores bed temperature for idle check
+	global BedTempActive_Old = 0
+
+if !exists(global.OldStateStatus)										; stores the status of the printer, processing = 1
+	global OldStateStatus = 0
 ; Log:
 ;	Description at the WebUi for Hotend and Bed changeable
 ;	Serial Com Port activated
