@@ -2,21 +2,19 @@
 ; run when G29 with no paramters is called.
 ; if this file not found G29 S0 will run
 var m557MinX = 4;  ; put your default here
-var m557MaxX = 230; ; put your default here
-var m557MinY = 7;  ; put your default here
-var m557MaxY = 230;  ; put your default here
-var MinSpace = 10 ; put default minimum spacing
-var MaxSpace = 30 ; put default maximum spacing
-var ProbeNumX = 7 ; put default probe points
-var ProbeNumY = 7 ; put default probe points.
-var ProbeCenterX = 110 ; will be updated to probe centre of print
-var ProbeCenterY = 110 ; will be updated to probe centre of print
- 
+var m557MaxX = 195 ; put your default here
+var m557MinY = 7   ; put your default here
+var m557MaxY = 185 ; put your default here
+var MinSpace = 10  ; put default minimum spacing
+var MaxSpace = 30  ; put default maximum spacing
+var ProbeNumX = 7  ; put default probe points
+var ProbeNumY = 7  ; put default probe points.
+
 var MaxProbePoints = max(floor(move.axes[0].max / var.MaxSpace),floor(move.axes[1].max / var.MaxSpace)) ; maximum points in either axis
 M558 H1.5 F600:300 T8000
 echo "Maximum allowed probe points is " ^ var.MaxProbePoints ^ " using max space of " ^ var.MaxSpace
-var SafeZone = 3 ; safety margin for probing near edge.
- 
+var SafeZone = 10 ; safety margin for probing near edge.
+
 if exists(global.minProbeX)
 	if global.minProbeX < (sensors.probes[0].offsets[0] + var.SafeZone)
 		echo "minProbeX (" ^ global.minProbeX ^ ") unreachable - reset to " ^ (sensors.probes[0].offsets[0] + var.SafeZone)
@@ -85,51 +83,20 @@ if (var.ProbeNumX * var.ProbeNumY) > 441
 		echo "Too many Y points - reduced to 21"
 	
 echo "Probing " ^ var.ProbeNumX ^ " points in X direction & " ^ var.ProbeNumY ^ " points in Y direction"
- 
-;check state of heaters
-var bedState = heat.heaters[0].state
-var bedActiveTemp = heat.heaters[0].active
-var bedStandbyTemp = heat.heaters[0].standby
-var nozzleState = heat.heaters[1].state
-M140 P0 S-276 ; turn off bed heater
-M568 P0 A0 ; turn off nozzle heater
- 
-; do probing
-set var.ProbeCenterX = (global.maxProbeX - ((global.maxProbeX - global.minProbeX)/2)) ; calculate centre point of probe area
-set var.ProbeCenterY = (global.maxProbeY - ((global.maxProbeY - global.minProbeY)/2)) ; calculate centre point of probe area
-echo "Setting Z datum point at X" ^ var.ProbeCenterX ^ " Y" ^ var.ProbeCenterY
-; set Z = 0 to centre of probe area
-G1 X{var.ProbeCenterX- sensors.probes[0].offsets[0]} Y{var.ProbeCenterY- sensors.probes[0].offsets[1]} Z{sensors.probes[0].diveHeight+2} F3600
-G30
-echo "Mesh probing"
+
 M557 X{var.m557MinX,var.m557MaxX} Y{var.m557MinY,var.m557MaxY} P{var.ProbeNumX,var.ProbeNumY}
 echo "M557 X" ^ {var.m557MinX} ^ ":" ^ {var.m557MaxX} ^ " Y" ^ {var.m557MinY} ^ ":" ^ {var.m557MaxY} ^  " P" ^ {var.ProbeNumX} ^ ":" ^ {var.ProbeNumY}
 if result != 0
 	abort "ERROR: could not create mesh" 
+;M557
 else
 	G29 S0
 	if result != 0
 		abort "ERROR: Mesh probing failed"
 	else
 		echo "Mesh probing successful.   Loading mesh.."
- 
-; set Z = 0 to centre of probe area
-echo "Reset Z datum in mesh centre"
-G1 X{var.ProbeCenterX- sensors.probes[0].offsets[0]} Y{var.ProbeCenterY- sensors.probes[0].offsets[1]} Z{sensors.probes[0].diveHeight+2} F3600
-G30
- 
-; turn the heaters back on if needed
-if var.bedState != "off"
-	M140 S{var.bedActiveTemp} R{var.bedStandbyTemp}
-	if var.bedState="active"
-		M144 P0 S1 ; put bed on active temp
-	else
-		M144 P0 S0 ; put bed on standby temp
-if var.nozzleState	!= "off"
-	if var.nozzleState = "active"
-		M568 P0 A2 ; set nozzle to active
-	else
-		M568 P0 A1 ; set nozzle to standby
-  
-  M558 H8 F600:300
-  
+
+M558 H8 F600:300
+G29 S3 "vc200_map.cfg"
+
+
