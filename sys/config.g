@@ -83,6 +83,7 @@ M404 N1.75 D0.4         			                        ; define filament and nozzle 
 ; Drive Mappings
 ; TMC 5160 S0 TMC 2209 S1
 ;=====================================================================================
+;M569 P0.0 S1 D3 V40 T4 Y1:2 								; physical drive 0 (X)  goes backward
 M569 P0.0 S1 D3 V40 T4 Y1:2 								; physical drive 0 (X)  goes backward
 M569 P0.1 S1 D3 V40 T4 Y1:2 								; physical drive 1 (Y)  goes backward
 M569 P0.2 S1 D3 V40 T4 Y1:2 								; physical drive 2 (Z1) goes forwards
@@ -91,12 +92,12 @@ M569 P121.0 S0 D3 V40 T4 Y1:2 								; physical drive 0 on Toolboad 1LC (Extrud
 M584 X0.0 Y0.1 Z0.2:0.3 E121.0						    	; set drive mapping
 
 M350 X16 Y16 Z16 E16 I1										; configure microstepping with interpolation
-M92 X160.00 Y160.00 Z1600.00  E415.00						; set steps per mm
+M92 X160.00 Y160.00 Z1600.00  E397.00						; set steps per mm 415.00
 
 M566 X900.00 Y900.00 Z12.00 E120.00							; set maximum instantaneous speed changes (mm/min)
 M203 X5000.00 Y5000.00 Z1200.00 E1200.00					; set maximum speeds (mm/min)
 M201 X600.00 Y600.00 Z10.00  E250.00						; set accelerations (mm/s^2)
-M906 X1000 Y1000 Z850 E550 I5								; set motor currents (mA) and motor idle factor in per cent
+M906 X1000 Y1000 Z850 E850 I15								; set motor currents (mA) and motor idle factor in per cent
 M84 S60								   		    			; Set idle timeout
 M564 H0                                                     ; allow unhomed movement
 
@@ -147,16 +148,17 @@ if !exists(global.Bed_Center_Y)
 ;=====================================================================================
 ; Heaters & Sensors
 ;=====================================================================================
-M308 S0 P"temp0" Y"thermistor" T100000 B4138 A"Bed"    		; configure sensor 0 as thermistor on pin temp0
+M308 S0 P"temp0" Y"thermistor" T100000 B3950 A"Bed"    		; configure sensor 0 as thermistor on pin temp0
 M950 H0 C"out0" T0 Q10                             			; create bed heater output on out0 and map it to sensor 0
 M307 H0 B0 S1.00                                 			; disable bang-bang mode for the bed heater and set PWM limit
 M140 H0                                          			; map heated bed to heater 0
 M143 H0 S130 A0 C0                                          ; set temperature limit for heater 0 to 130C - fault if too high
 
-M308 S1 P"121.temp0" Y"thermistor" T100000 B4138 A"Nozzle"	; configure sensor 1 as thermistor on pin e0temp
+;M308 S1 P"121.temp0" Y"thermistor" T100000 B4138 A"Nozzle"	; configure sensor 1 as thermistor on pin e0temp
+M308 S1 P"121.temp0" Y"thermistor" T100000 B4725 C7.06e-8 A"Nozzle"
 M950 H1 C"121.out0" T1										; create nozzle heater output on e0heat and map it to sensor 1
 M307 H1 B0 S1.00											; disable bang-bang mode for heater  and set PWM limit
-M143 H1 S275 A0 C0												; set temperature limit for heater 1 to 260C
+M143 H1 S285 A0 C0											; set temperature limit for heater 1 to 260C
 
 ;M308 S2 P"temp2" Y"thermistor" T100000 B4138 A"Umbenutzt"	; Test sensor
 ;M950 H2 C"out3" T2											;
@@ -193,7 +195,7 @@ G10 P0 R0 S0												; set initial tool 0 active and standby temperatures to 
 ;=====================================================================================
 ; Miscellaneous
 ;=====================================================================================
-M955 P121.0 I54 ; specify orientation of accelerometer on Toolboard 1LC with CAN address 121
+M955 P121.0 I54 											; specify orientation of accelerometer on Toolboard 1LC with CAN address 121
 
 M501														; Config overwrite
 

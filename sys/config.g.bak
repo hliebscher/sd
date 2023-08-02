@@ -83,6 +83,7 @@ M404 N1.75 D0.4         			                        ; define filament and nozzle 
 ; Drive Mappings
 ; TMC 5160 S0 TMC 2209 S1
 ;=====================================================================================
+;M569 P0.0 S1 D3 V40 T4 Y1:2 								; physical drive 0 (X)  goes backward
 M569 P0.0 S1 D3 V40 T4 Y1:2 								; physical drive 0 (X)  goes backward
 M569 P0.1 S1 D3 V40 T4 Y1:2 								; physical drive 1 (Y)  goes backward
 M569 P0.2 S1 D3 V40 T4 Y1:2 								; physical drive 2 (Z1) goes forwards
@@ -91,14 +92,14 @@ M569 P121.0 S0 D3 V40 T4 Y1:2 								; physical drive 0 on Toolboad 1LC (Extrud
 M584 X0.0 Y0.1 Z0.2:0.3 E121.0						    	; set drive mapping
 
 M350 X16 Y16 Z16 E16 I1										; configure microstepping with interpolation
-M92 X160.00 Y160.00 Z1600.00  E415.00						; set steps per mm
+M92 X160.00 Y160.00 Z1600.00  E397.00						; set steps per mm 415.00
 
 M566 X900.00 Y900.00 Z12.00 E120.00							; set maximum instantaneous speed changes (mm/min)
 M203 X5000.00 Y5000.00 Z1200.00 E1200.00					; set maximum speeds (mm/min)
 M201 X600.00 Y600.00 Z10.00  E250.00						; set accelerations (mm/s^2)
-M906 X1000 Y1000 Z850 E850 I5								; set motor currents (mA) and motor idle factor in per cent
+M906 X1000 Y1000 Z850 E850 I15								; set motor currents (mA) and motor idle factor in per cent
 M84 S60								   		    			; Set idle timeout
-M564 H0                                                    ; allow unhomed movement
+M564 H0                                                     ; allow unhomed movement
 
 ;=====================================================================================
 ; Axis Limits
@@ -193,7 +194,7 @@ G10 P0 R0 S0												; set initial tool 0 active and standby temperatures to 
 ;=====================================================================================
 ; Miscellaneous
 ;=====================================================================================
-M955 P121.0 I54 ; specify orientation of accelerometer on Toolboard 1LC with CAN address 121
+M955 P121.0 I54 											; specify orientation of accelerometer on Toolboard 1LC with CAN address 121
 
 M501														; Config overwrite
 

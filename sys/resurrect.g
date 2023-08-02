@@ -1,8 +1,8 @@
-; File "0:/gcodes/Pad - 20x20_PLA_2m39s.gcode" resume print after print paused at 2023-08-01 23:23
+; File "0:/gcodes/CR-3D_Calibration_Cube_V2_PLA_1h20m.gcode" resume print after print paused at 2023-08-02 08:22
 G21
 M140 P0 S50.0
 G29 S1
-G92 X94.005 Y66.508 Z0.700
+G92 X97.473 Y30.811 Z3.300
 G60 S1
 G10 P0 S210 R220
 T0 P0
@@ -27,14 +27,14 @@ M106 P1 S1.00
 M116
 G92 E0.00000
 M83
-M486 S0 A"Pad - 20x20.stl id:0 copy 0"
+M486 S0 A"CR-3D_Calibration_Cube_V2.STL id:0 copy 0"
 M486 S0
 G17
-M23 "0:/gcodes/Pad - 20x20_PLA_2m39s.gcode"
-M26 S12578
-G0 F6000 Z2.700
-G0 F6000 X94.005 Y66.508
-G0 F6000 Z0.700
+M23 "0:/gcodes/CR-3D_Calibration_Cube_V2_PLA_1h20m.gcode"
+M26 S123026
+G0 F6000 Z5.300
+G0 F6000 X97.473 Y30.811
+G0 F6000 Z3.300
 G1 F4800.0 P0
 G21
 M24
