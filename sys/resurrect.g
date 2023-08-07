@@ -1,10 +1,10 @@
-; File "0:/gcodes/CR-3D_Calibration_Cube_V2_PLA_1h20m.gcode" resume print after print paused at 2023-08-02 08:22
+; File "0:/gcodes/Box-1x1_PLA_1h18m.gcode" resume print after print paused at 2023-08-02 12:24
 G21
 M140 P0 S50.0
 G29 S1
-G92 X97.473 Y30.811 Z3.300
+G92 X132.554 Y50.194 Z2.100
 G60 S1
-G10 P0 S210 R220
+G10 P0 S235 R230
 T0 P0
 M98 P"resurrect-prologue.g"
 M116
@@ -27,14 +27,14 @@ M106 P1 S1.00
 M116
 G92 E0.00000
 M83
-M486 S0 A"CR-3D_Calibration_Cube_V2.STL id:0 copy 0"
+M486 S0 A"Box-1x1.stl id:0 copy 0"
 M486 S0
 G17
-M23 "0:/gcodes/CR-3D_Calibration_Cube_V2_PLA_1h20m.gcode"
-M26 S123026
-G0 F6000 Z5.300
-G0 F6000 X97.473 Y30.811
-G0 F6000 Z3.300
-G1 F4800.0 P0
+M23 "0:/gcodes/Box-1x1_PLA_1h18m.gcode"
+M26 S114272
+G0 F6000 Z4.100
+G0 F6000 X132.554 Y50.194
+G0 F6000 Z2.100
+G1 F8106.5 P1
 G21
 M24
