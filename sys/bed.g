@@ -34,5 +34,5 @@ G1 X{move.axes[0].max / 2 - sensors.probes[0].offsets[0]} Y{move.axes[1].max / 2
 M400
 G30
 M400
-M558 H8 F600:300  
+M558 H4 F600:300  
 M402

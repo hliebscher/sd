@@ -96,6 +96,6 @@ else
 	else
 		echo "Mesh probing successful.   Loading mesh.."
 M402
-M558 H8 F600:300
+M558 H5 F600:300
 
 
