@@ -199,7 +199,7 @@ G10 P0 R0 S0												; set initial tool 0 active and standby temperatures to 
 ;=====================================================================================
 ; Miscellaneous
 ;=====================================================================================
-M955 P121.0 I54 											; specify orientation of accelerometer on Toolboard 1LC with CAN address 121
+M955 P121.0 I10 											; specify orientation of accelerometer on Toolboard 1LC with CAN address 121
 
 M501														; Config overwrite
 
