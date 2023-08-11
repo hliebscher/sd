@@ -88,11 +88,11 @@ M569 P0.0 S1 D3 V40 T4 Y1:2 								; physical drive 0 (X)  goes backward
 M569 P0.1 S1 D3 V40 T4 Y1:2 								; physical drive 1 (Y)  goes backward
 M569 P0.2 S1 D3 V40 T4 Y1:2 								; physical drive 2 (Z1) goes forwards
 M569 P0.3 S1 D3 V40 T4 Y1:2 								; physical drive 3 (Z2) goes forwards
-M569 P121.0 S0 D3 V40 T4 Y1:2 								; physical drive 0 on Toolboad 1LC (Extruder) goes forward	
+M569 P121.0 S1 D3 V40 T4 Y1:2 								; physical drive 0 on Toolboad 1LC (Extruder) goes forward	
 M584 X0.0 Y0.1 Z0.2:0.3 E121.0						    	; set drive mapping
 
 M350 X16 Y16 Z16 E16 I1										; configure microstepping with interpolation
-M92 X160.00 Y160.00 Z1600.00  E397.00						; set steps per mm 415.00
+M92 X160.00 Y160.00 Z1600.00  E932.00						; set steps per mm 415.00 war 397
 
 M566 X900.00 Y900.00 Z12.00 E120.00							; set maximum instantaneous speed changes (mm/min)
 M203 X5000.00 Y5000.00 Z1200.00 E1200.00					; set maximum speeds (mm/min)
@@ -105,7 +105,7 @@ M564 H0                                                     ; allow unhomed move
 ; Axis Limits
 ;=====================================================================================
 ; Axis Limits
-M208 X-20:220 Y7:230 Z-5:270                                 ; set axis minima /
+M208 X-6:229 Y0:235 Z-5:220                                 ; set axis minima /
 M671 X-10:235 Y110:110 S3.0
 
 ;=====================================================================================
@@ -133,8 +133,12 @@ M915 X Y R0 F0
 ; BL-Touch Left 
 ;=====================================================================================
 M950 S0 C"121.io0.out"                                   	; sensor for BL-Touch
-M558 P9 C"^121.io0.in" H5 F400 T6000 A1 ;S0.03        	    ; for BL-Touch
-M557 X15:200 Y15:200 S30:30									; define mesh grid
+;M558 P8 C"121.io0.in" H1.5 F1000 T12000 A3                  ; set Z probe to PINDA2
+;M558 P8 C"121.io0.in" H1.5 F400 T6000 A3        
+M558 P8 C"121.io0.in" H5 F1000:120 T7000 A6 				; set Z probe to PINDA2
+;M558 P9 C"^121.io0.in" H5 F400 T6000 A1 ;S0.03        	    ; for BL-Touch
+G31 P500 X0.0 Y26.0 Z0
+M557 X15:200 Y10:180 S30:30									; define mesh grid
 ;M98 P"0:/sys/setDefaultProbePoints.g"                      ; define default mesh grid
 
 ;Calculate bed centre
@@ -155,9 +159,9 @@ M140 H0                                          			; map heated bed to heater 0
 M143 H0 S130 A0 C0                                          ; set temperature limit for heater 0 to 130C - fault if too high
 
 ;M308 S1 P"121.temp0" Y"thermistor" T100000 B4138 A"Nozzle"	; configure sensor 1 as thermistor on pin e0temp
-M308 S1 P"121.temp0" Y"thermistor" T100000 B4725 C7.06e-8 A"Nozzle"
+M308 S1 P"121.temp0" Y"thermistor" T100000 B4138 C7.06e-8 A"Nozzle"
 M950 H1 C"121.out0" T1										; create nozzle heater output on e0heat and map it to sensor 1
-M307 H1 B0 S1.00											; disable bang-bang mode for heater  and set PWM limit
+M307 H1 R1.822 K0.830:0.000 D6.71 E1.35 S1.00 B0 V24.1		; disable bang-bang mode for heater  and set PWM limit
 M143 H1 S285 A0 C0											; set temperature limit for heater 1 to 260C
 
 ;M308 S2 P"temp2" Y"thermistor" T100000 B4138 A"Umbenutzt"	; Test sensor
@@ -170,9 +174,9 @@ M308 S4 Y"mcu-temp" A"CPU"									;
 ;=====================================================================================
 ; Fans
 ;=====================================================================================
-M950 F0 C"121.out1" Q1000									; Hotend Fan - create fan 0 on pin fan0 and set its frequency
+M950 F0 C"121.out1" Q100									; Hotend Fan - create fan 0 on pin fan0 and set its frequency
 M106 P0 H1 T45 C"Hotend"									; set fan 0 value, Set fan speed to 100% if used ,Thermostatic control on
-M950 F1 C"121.out2"  Q25									; Part Cooling Fan - create fan 1 on pin fan1 and set its frequency
+M950 F1 C"121.out2"  Q1250									; Part Cooling Fan - create fan 1 on pin fan1 and set its frequency
 M106 P1 S0 H-1 B0.3 C"Druckteil"							; set fan 1 value. Thermostatic control is turned on
 ;M950 F2 C"out6" ;Q500										; Free Fan Port - create fan 2 on pin fan2 and set its frequency
 ;M106 P2 S0 H-1												; set fan 2 value. Thermostatic control is turned on

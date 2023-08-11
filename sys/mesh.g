@@ -1,10 +1,10 @@
 ;0:/sys/mesh.g
 ; run when G29 with no paramters is called.
 ; if this file not found G29 S0 will run
-var m557MinX = 4;  ; put your default here
-var m557MaxX = 188 ; put your default here
+var m557MinX = 5;  ; put your default here
+var m557MaxX = 225 ; put your default here
 var m557MinY = 5   ; put your default here
-var m557MaxY = 180 ; put your default here
+var m557MaxY = 225 ; put your default here
 var MinSpace = 10  ; put default minimum spacing
 var MaxSpace = 30  ; put default maximum spacing
 var ProbeNumX = 7  ; put default probe points

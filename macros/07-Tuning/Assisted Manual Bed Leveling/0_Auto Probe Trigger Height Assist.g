@@ -22,7 +22,7 @@ M109 S210		; Set nozzle to 210 and wait
 ;
 M291 P"Nozzle will now move to center of bed to reset Z0 and calibrate probe" S3
 G90			; Absolute positioning
-G1 X{move.axes[0].max / 2 - sensors.probes[0].offsets[0]} Y{move.axes[1].max / 2  + sensors.probes[0].offsets[1]} F2800
+G1 X{move.axes[0].max / 2 - sensors.probes[0].offsets[0]} Y{move.axes[1].max / 2  - sensors.probes[0].offsets[1]} F2800
 G31 Z0				; Reset zprobe trigger height
 G92 Z5				; Reset z to 5 to allow jogging up to touch bed to nozzle
 
@@ -42,7 +42,7 @@ G92 Z0			; Set z = 0
 ;
 M291 P"Probe will now measure trigger height 10 times" R"ZProbe Trigger Height Calibration" S3
 G1 Z10			; Drop bed for nozzle clearance
-G1 X{move.axes[0].max / 2 - sensors.probes[0].offsets[0]} Y{move.axes[1].max / 2  + sensors.probes[0].offsets[1]} F2800
+G1 X{move.axes[0].max / 2 - sensors.probes[0].offsets[0]} Y{move.axes[1].max / 2  - sensors.probes[0].offsets[1]} F2800
 
 M291 P"Heights will be found in gcode console if logging is enabled" R"Did you remember to enabled gcode logging?" S3
 
