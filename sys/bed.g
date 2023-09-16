@@ -10,7 +10,7 @@ M290 S0 R0                                      ; clear baby steps
 if !move.axes[0].homed || !move.axes[1].homed                                  ; If the printer hasn't been homed, home it
 	M98 P"0:/sys/homexy.g"                                                     ; home y and x
 M401
-M558 H8 F600:300                                             ; 
+M558 H5 F600:300                                             ; 
 G1 X{move.axes[0].max / 2 - sensors.probes[0].offsets[0]} Y{move.axes[1].max / 2  - sensors.probes[0].offsets[1]} F2800
 M400
 G30

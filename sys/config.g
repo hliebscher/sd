@@ -40,7 +40,7 @@ G4 S2														; Wait a moment for the CAN expansion boards to start
 ;=====================================================================================
 ; Com Port
 ;=====================================================================================
-M575 P1 B57600 S1											; Activate Serial Com Port for PanelDUE on IO_0
+M575 P1 B115200 S1											; Activate Serial Com Port for PanelDUE on IO_0. 57600
 ;=====================================================================================
 
 
@@ -84,23 +84,44 @@ M404 N1.75 D0.4         			                        ; define filament and nozzle 
 ; TMC 5160 S0 TMC 2209 S1
 ;=====================================================================================
 ;M569 P0.0 S1 D3 V40 T4 Y1:2 								; physical drive 0 (X)  goes backward
-M569 P0.0 S1 D3 V40 T4 Y1:2 								; physical drive 0 (X)  goes backward
-M569 P0.1 S1 D3 V40 T4 Y1:2 								; physical drive 1 (Y)  goes backward
-M569 P0.2 S1 D3 V40 T4 Y1:2 								; physical drive 2 (Z1) goes forwards
-M569 P0.3 S1 D3 V40 T4 Y1:2 								; physical drive 3 (Z2) goes forwards
-M569 P121.0 S1 D3 V40 T4 Y1:2 								; physical drive 0 on Toolboad 1LC (Extruder) goes forward	
-M584 X0.0 Y0.1 Z0.2:0.3 E121.0						    	; set drive mapping
+M569 P0.0 S1 ;D3 ;V40 T4 Y1:2 								; physical drive 0 (X)  goes backward
+M569 P0.1 S1 ;D3 ;V40 T4 Y1:2 								; physical drive 1 (Y)  goes backward
+M569 P0.2 S1 ;D3 ;V40 T4 Y1:2 								; physical drive 2 (Z1) goes forwards
+M569 P0.3 S1 ;D3 ;V40 T4 Y1:2 								; physical drive 3 (Z2) goes forwards
+M569 P124.0 S1 ;D3 ;V40 T4 Y1:2 								; physical drive 0 on Toolboad 1LC (Extruder) goes forward	
+M584 X0.0 Y0.1 Z0.2:0.3 E124.0						    	; set drive mapping
 
-M350 X16 Y16 Z16 E16 I1										; configure microstepping with interpolation
-M92 X160.00 Y160.00 Z1600.00  E932.00						; set steps per mm 415.00 war 397
+;M350 X16 Y16 Z16 E16 I1									; configure microstepping with interpolation
+M350 X{16 * 4} Y{16 * 4} Z16 E16 I1										; configure microstepping with interpolation
 
-M566 X900.00 Y900.00 Z12.00 E120.00							; set maximum instantaneous speed changes (mm/min)
-M203 X5000.00 Y5000.00 Z1200.00 E1200.00					; set maximum speeds (mm/min)
-M201 X600.00 Y600.00 Z10.00  E250.00						; set accelerations (mm/s^2)
-;M906 X1000 Y1000 Z850 E850 I15								; set motor currents (mA) and motor idle factor in per cent
-M906 X1000 Y1000 Z850 E550 I15
+M92 X{160.00 * 4} Y{160.00 * 4} Z1600.00  E932.00						; set steps per mm 415.00 war 397
+
+;=====================================================================================
+; Power
+;=====================================================================================
+M906 X1000 Y1000 Z850 E750 I15
 M84 S60								   		    			; Set idle timeout
 M564 H0                                                     ; allow unhomed movement
+;=====================================================================================
+; Speeds
+;=====================================================================================
+M203 X15000 Y15000 Z600 E7200				; Maximum speeds (mm/min) // XY15000(250mm/s), Z600(10mm/s)), E7200 (120mm/s)
+; Accelerations and Jerk
+M201 X2500 Y2500 Z100						; Accelerations (mm/s^2)
+;M201 E120									; Flex3Drive
+;M201 E5000									; Biqu H2
+M201 E3000									; Orbiter 2.0
+M566 X900 Y900 Z12							; Maximum jerk speeds (mm/min) 
+;M566 E6									; Flex3Drive
+;M566 E300									; Biqu H2
+M566 E300									; Orbiter 2.0
+
+
+
+;M566 X900.00 Y900.00 Z12.00 E120.00			    		; set maximum instantaneous speed changes (mm/min)
+;M203 X5000.00 Y5000.00 Z1200.00 E1200.00					; set maximum speeds (mm/min)
+;M201 X600.00 Y600.00 Z10.00  E250.00						; set accelerations (mm/s^2)
+;M906 X1000 Y1000 Z850 E850 I15								; set motor currents (mA) and motor idle factor in per cent
 
 ;=====================================================================================
 ; Axis Limits
@@ -120,8 +141,10 @@ M671 X-10:235 Y110:110 S3.0
 ;M574 Z1 S1 P"!io2.in+!io5.in"								; configure for GL-8H and mechanical, delete '!' for optical
 ;M574 U1 S1 P"!io5.in"										; configure for GL-8H and mechanical, delete '!' for optical
 ;M574 X1 S3                  	                            ; configure sensorless endstop for low end on x
-M574 X1 S1 P"!121.io2.in"
+;M574 X1 S1 P"!121.io2.in"
+M574 X1 S1 P"!^124.io1.in"
 ;M574 Y1 S3              	                                ; configure sensorless endstop for low end on y
+;M574 Y2 S1 P"!io3.in" 
 M574 Y2 S1 P"!io3.in" 
 M574 Z1 S2          	                                    ; configure z-probe endstop for low end on z
 ;M574 Z2 S1 P"!io4.in+!io5.in"								; configure z-probe endstop for high end on z
@@ -133,10 +156,12 @@ M915 X Y R0 F0
 ; Z-Probe
 ; BL-Touch Left 
 ;=====================================================================================
-M950 S0 C"121.io0.out"                                   	; sensor for BL-Touch
-;M558 P8 C"121.io0.in" H1.5 F1000 T12000 A3                  ; set Z probe to PINDA2
+M950 S0 C"124.io0.out"                                    	; sensor for BL-Touch
+;M950 S0 C"121.io0.out"                                    	; sensor for BL-Touch
+;M558 P8 C"121.io0.in" H1.5 F1000 T12000 A3                 ; set Z probe to PINDA2
 ;M558 P8 C"121.io0.in" H1.5 F400 T6000 A3        
-M558 P8 C"121.io0.in" H5 F1000:120 T7000 A6 				; set Z probe to PINDA2
+M558 P8 C"^124.io0.in" H5 F1000:120 T7000 A6 				; set Z probe to PINDA2
+;M558 P8 C"121.io0.in" H5 F1000:120 T7000 A6 				; set Z probe to PINDA2
 ;M558 P9 C"^121.io0.in" H5 F400 T6000 A1 ;S0.03        	    ; for BL-Touch
 G31 P500 X0.0 Y26.0 Z0
 M557 X15:200 Y10:180 S30:30									; define mesh grid
@@ -160,8 +185,11 @@ M140 H0                                          			; map heated bed to heater 0
 M143 H0 S130 A0 C0                                          ; set temperature limit for heater 0 to 130C - fault if too high
 
 ;M308 S1 P"121.temp0" Y"thermistor" T100000 B4138 A"Nozzle"	; configure sensor 1 as thermistor on pin e0temp
-M308 S1 P"121.temp0" Y"thermistor" T100000 B4138 C7.06e-8 A"Nozzle"
-M950 H1 C"121.out0" T1										; create nozzle heater output on e0heat and map it to sensor 1
+;M308 S1 P"121.temp0" Y"thermistor" T100000 B4138 C7.06e-8 A"Nozzle"
+;M950 H1 C"121.out0" T1										; create nozzle heater output on e0heat and map it to sensor 1
+;M308 S1 P"124.temp0" Y"thermistor" T100000 B4138 C7.06e-8 A"Nozzle"
+M308 S1 P"124.temp0" Y"thermistor" T100000 B4092 A"Nozzle"
+M950 H1 C"124.out0" T1										; create nozzle heater output on e0heat and map it to sensor 1
 M307 H1 R1.822 K0.830:0.000 D6.71 E1.35 S1.00 B0 V24.1		; disable bang-bang mode for heater  and set PWM limit
 M143 H1 S285 A0 C0											; set temperature limit for heater 1 to 260C
 
@@ -170,15 +198,21 @@ M143 H1 S285 A0 C0											; set temperature limit for heater 1 to 260C
 
 M308 S3 Y"drivers" A"Treiber"								;
 M308 S4 Y"mcu-temp" A"CPU"									;
-
+M308 S2 P"124.temp1" Y"thermistor" A"Chamber Temperature" T100000 B4092
 
 ;=====================================================================================
 ; Fans
 ;=====================================================================================
-M950 F0 C"121.out1" Q100									; Hotend Fan - create fan 0 on pin fan0 and set its frequency
+M950 F0 C"124.out1" Q500									; Hotend Fan - create fan 0 on pin fan0 and set its frequency
 M106 P0 H1 T45 C"Hotend"									; set fan 0 value, Set fan speed to 100% if used ,Thermostatic control on
-M950 F1 C"121.out2"  Q1250									; Part Cooling Fan - create fan 1 on pin fan1 and set its frequency
+M950 F1 C"124.out2"  Q5000									; Part Cooling Fan - create fan 1 on pin fan1 and set its frequency
 M106 P1 S0 H-1 B0.3 C"Druckteil"							; set fan 1 value. Thermostatic control is turned on
+
+;M950 F0 C"121.out1" Q100									; Hotend Fan - create fan 0 on pin fan0 and set its frequency
+;M106 P0 H1 T45 C"Hotend"									; set fan 0 value, Set fan speed to 100% if used ,Thermostatic control on
+;M950 F1 C"121.out2"  ;Q5000									; Part Cooling Fan - create fan 1 on pin fan1 and set its frequency
+;M106 P1 S0 H-1 B0.3 C"Druckteil"							; set fan 1 value. Thermostatic control is turned on
+
 ;M950 F2 C"out6" ;Q500										; Free Fan Port - create fan 2 on pin fan2 and set its frequency
 ;M106 P2 S0 H-1												; set fan 2 value. Thermostatic control is turned on
 
@@ -200,8 +234,8 @@ G10 P0 R0 S0												; set initial tool 0 active and standby temperatures to 
 ;=====================================================================================
 ; Miscellaneous
 ;=====================================================================================
-M955 P121.0 I10 											; specify orientation of accelerometer on Toolboard 1LC with CAN address 121
-
+M955 P124.0 I52 											; specify orientation of accelerometer on Toolboard 1LC with CAN address 121
+M593 P"zvd" F43.6
 M501														; Config overwrite
 
 T0															; select first tool, setzt Hotend 0 auf aktiv 

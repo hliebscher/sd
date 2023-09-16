@@ -1,2 +1,5 @@
 *www*
-*.gcode*
+*.gcode
+*.gcodes
+*.csv
+/gcodes

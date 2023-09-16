@@ -19,19 +19,17 @@ G90                                                                    ; absolut
 ; =========================================================================================================
 ; Home Z Axis
 ; =========================================================================================================
-M401
+M401                ; deploy Probe
 G90              	; absolute positioning
 ;G1 X135 Y115 F5000 	; move probe to bed center
 G1 X{move.axes[0].max / 2 - sensors.probes[0].offsets[0]} Y{move.axes[1].max / 2  - sensors.probes[0].offsets[1]} F2800
-;G1 X{move.axes[0].machinePosition - sensors.probes[0].offsets[0]} Y{move.axes[1].machinePosition - sensors.probes[0].offsets[1]} F1800
-
 M558 F400			; set probe feed rate at 600mm/m
 G30              	; probe Z (at high speed)
-M558 F120			; reset probe feed rate to 120mm/m
+M558 F160			; reset probe feed rate to 120mm/m
 G30					; probe Z (low speed)
-M400                                                                   ; wait for current moves to finish
+M400                ; wait for current moves to finish
 ; =========================================================================================================
-M402
+M402				; release Probe
 ; =========================================================================================================
-G90                                                                    ; absolute positioning
+G90                 ; absolute positioning
 ; =========================================================================================================
